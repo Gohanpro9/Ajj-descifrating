@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código del Teclado Simbólico</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea { height: 100px; resize: none; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background-color: #0056b3; }
+        .result {
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 4px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            min-height: 50px;
+        }
+        .extra-note {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Código del Teclado Simbólico</h1>
+    
+    <label for="action">Selecciona una acción:</label>
+    <select id="action">
+        <option value="encode">Codificar</option>
+        <option value="decode">Descifrar</option>
+    </select>
+
+    <label for="message">Mensaje:</label>
+    <textarea id="message" placeholder="Escribe tu mensaje aquí..."></textarea>
+
+    <p class="extra-note">* La letra ñ corresponde al símbolo ¡ (es un extra que no sigue el orden del teclado).</p>
+
+    <button onclick="process()">Procesar Mensaje</button>
+
+    <label>Resultado:</label>
+    <div id="result" class="result">El resultado aparecerá aquí...</div>
+</div>
+
+<script>
+    // Tabla de correspondencia exacta proporcionada + extra de la ñ
+    const charMap = {
+        'q': '1', 'w': '2', 'e': '3', 'r': '4', 't': '5', 'y': '6', 'u': '7', 'i': '8', 'o': '9', 'p': '0',
+        'a': '@', 's': '#', 'd': '$', 'f': '_', 'g': '&', 'h': '-', 'j': '+', 'k': '(', 'l': ')',
+        'z': '*', 'x': '"', 'c': "'", 'v': ':', 'b': ';', 'n': '!', 'm': '?',
+        'ñ': '¡'
+    };
+
+    // Crear el mapa inverso para descifrar
+    const reverseMap = {};
+    for (const key in charMap) {
+        reverseMap[charMap[key]] = key;
+    }
+
+    function process() {
+        const action = document.getElementById('action').value;
+        const input = document.getElementById('message').value;
+        const resultDiv = document.getElementById('result');
+        let output = "";
+
+        if (action === "encode") {
+            // Codificar
+            for (let char of input) {
+                let lowerChar = char.toLowerCase();
+                if (charMap[lowerChar]) {
+                    output += charMap[lowerChar];
+                } else {
+                    output += char; // Mantiene espacios y otros caracteres
+                }
+            }
+        } else {
+            // Descifrar
+            for (let char of input) {
+                if (reverseMap[char]) {
+                    output += reverseMap[char];
+                } else {
+                    output += char;
+                }
+            }
+        }
+
+        resultDiv.textContent = output;
+    }
+</script>
+
+</body>
+</html>
+
