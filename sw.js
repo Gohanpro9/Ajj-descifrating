@@ -9,3 +9,7 @@ self.addEventListener("activate", e => {
     )
   )
 })
+
+
+self.skipWaiting()
+navigator.serviceWorker.addEventListener("controllerchange", () => location.reload())
